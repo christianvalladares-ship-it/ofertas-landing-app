@@ -34,7 +34,7 @@ def load_data():
     if os.path.exists(csv_path):
         for encoding in ["utf-8", "latin1", "iso-8859-1", "cp1252"]:
             try:
-                df = pd.read_csv(csv_path, sep=";", encoding=encoding, dtype=str)
+                df = pd.read_csv(csv_path, sep=",", encoding=encoding, dtype=str)
                 print(f"✅ CSV cargado con éxito ({encoding})")
                 break
             except Exception:
