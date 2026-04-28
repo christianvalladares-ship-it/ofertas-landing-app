@@ -38,13 +38,13 @@ if df is not None:
                 st.write("Estas son tus opciones de crédito disponibles:")
 
                 # Definimos los iconos, etiquetas, el nombre EXACTO de la columna y si lleva "$" (True/False)
-                ofertas = [
-                    ("💳", "Límite Tarjeta de Crédito", row.get("Limite TC"), True),
-                    ("💳", "Tipo de Tarjeta de Crédito", row.get("Tipo TC"), False),
-                    ("📱", "Consumo Móvil", row.get("Consumo Movil"), True),
-                    ("💸", "Adelanto de Salario", row.get("Adelanto de Salario"), True),
-                    ("🏦", "Orden de Descuento", row.get("Consumo con Orden de Descuento"), True),
-                    ("🔥", "Combo Oferta Especial", row.get("Combo_Oferta"), True)
+                ofertas = ofertas = [
+                    ("💳", "Límite Tarjeta de Crédito", row.get("LIMITE TC"), True),
+                    ("💳", "Tipo de Tarjeta de Crédito", row.get("TIPO TC"), False),
+                    ("📱", "Consumo Móvil", row.get("CONSUMO MOVIL"), True),
+                    ("💸", "Adelanto de Salario", row.get("ADELANTO DE SALARIO"), True),
+                    ("🏦", "Orden de Descuento", row.get("CONSUMO CON ORDEN DE DESCUENTO"), True),
+                    ("🔥", "Combo Oferta Especial", row.get("COMBO_OFERTA"), True)
                 ]
 
                 # Mostramos las ofertas filtrando ceros y nulos en varios formatos
