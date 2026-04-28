@@ -43,7 +43,7 @@ if df is not None:
                     ("💳", "Tipo de Tarjeta de Crédito", row.get("TIPO TC"), False),
                     ("📱", "Consumo Móvil", row.get("CONSUMO MOVIL"), True),
                     ("💸", "Adelanto de Salario", row.get("ADELANTO DE SALARIO"), True),
-                    ("🏦", "Orden de Descuento", row.get("CONSUMO CON ORDEN DE DESCUENTO"), True),
+                    ("🏦", "Crédito Con Orden de Descuento", row.get("CONSUMO CON ORDEN DE DESCUENTO"), True),
                     ("🔥", "Combo Oferta Especial", row.get("COMBO_OFERTA"), True)
                 ]
 
