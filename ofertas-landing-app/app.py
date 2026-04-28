@@ -34,35 +34,53 @@ if df is not None:
                 row = result.iloc[0]
                 
                 st.balloons() # ✨ Efecto visual de celebración
-                st.success(f"### 🎉 ¡Felicidades, {row['NOMBRE DEL EMPLEADO']}!")
+                st.success(f"### 🎉 ¡Felicidades, {row.get('NOMBRE DEL EMPLEADO', 'Cliente')}!")
                 st.write("Estas son tus opciones de crédito disponibles:")
 
-                # Definimos los iconos y etiquetas
+                # Definimos los iconos, etiquetas, el valor y si lleva signo de DÓLAR (True/False)
                 ofertas = [
-                    ("💳", "Límite Tarjeta de Crédito", row.get("Limite TC")),
-                    ("💳", "Tipo de Tarjeta de Crédito", row.get("Tipo TC")),
-                    ("📱", "Consumo Móvil", row.get("Consumo Movil")),
-                    ("💸", "Adelanto de Salario", row.get("Adelanto de Salario")),
-                    ("🏦", "Orden de Descuento", row.get("Consumo con Orden de Descuento")),
-                    ("🔥", "Combo Oferta Especial", row.get("Combo_Oferta"))
+                    ("💳", "Límite Tarjeta de Crédito", row.get("Limite TC"), True),
+                    ("💳", "Tipo de Tarjeta de Crédito", row.get("Tipo TC"), False), # False para no ponerle "$"
+                    ("📱", "Consumo Móvil", row.get("Consumo Movil"), True),
+                    ("💸", "Adelanto de Salario", row.get("Adelanto de Salario"), True),
+                    ("🏦", "Orden de Descuento", row.get("Consumo con Orden de Descuento"), True),
+                    ("🔥", "Combo Oferta Especial", row.get("Combo_Oferta"), True)
                 ]
 
-                # Mostramos las ofertas en un diseño más limpio
-                for icono, nombre, valor in ofertas:
-                    if pd.notna(valor) and str(valor).strip() not in ["0", "0.0", "nan", ""]:
+                # Mostramos las ofertas filtrando ceros y nulos en varios formatos
+                ofertas_mostradas = 0
+                for icono, nombre, valor, es_moneda in ofertas:
+                    # Normalizamos el valor a texto en minúsculas para compararlo bien
+                    val_str = str(valor).strip().lower()
+                    
+                    # Filtramos todo lo que sea vacío, cero o nulo
+                    if pd.notna(valor) and val_str not in ["0", "0.0", "0.00", "nan", "none", "null", ""]:
+                        prefix = "$ " if es_moneda else ""
                         st.markdown(f"""
                             <div class="offer-card">
                                 <strong>{icono} {nombre}:</strong><br>
-                                <span style='font-size: 1.2em; color: #1f77b4;'>$ {valor}</span>
+                                <span style='font-size: 1.2em; color: #1f77b4;'>{prefix}{valor}</span>
                             </div>
                         """, unsafe_allow_html=True)
+                        ofertas_mostradas += 1
+
+                if ofertas_mostradas == 0:
+                    st.info("Actualmente no tienes ofertas de crédito pre-aprobadas, pero acércate a la agencia para evaluar tu caso.")
 
                 st.divider()
+                
                 # Total destacado
                 total = row.get('Total Ofertado', 'No disponible')
-                st.metric(label="💰 TOTAL DISPONIBLE PARA TI", value=f"$ {total}")
+                if str(total).strip().lower() not in ["nan", "none", "0", "0.0"]:
+                    st.metric(label="💰 TOTAL DISPONIBLE PARA TI", value=f"$ {total}")
                 
                 st.info("ℹ️ Para activar cualquiera de estas ofertas, acércate a tu agencia más cercana o llámanos. 📞")
+                
+                # 🛠️ MODO DEBUG: Esto te salvará la vida para ver qué hay realmente en la fila
+                with st.expander("🛠️ Modo Debug (Ver datos de esta fila)"):
+                    st.write("Si las ofertas salen vacías, revisa si los nombres de las columnas aquí coinciden exactamente con el código:")
+                    st.json(row.to_dict())
+
             else:
                 st.error("😕 Lo sentimos, no encontramos ofertas asociadas a ese DUI. Por favor, verifica el número.")
         else:
