@@ -37,10 +37,10 @@ if df is not None:
                 st.success(f"### 🎉 ¡Felicidades, {row.get('NOMBRE DEL EMPLEADO', 'Cliente')}!")
                 st.write("Estas son tus opciones de crédito disponibles:")
 
-                # Definimos los iconos, etiquetas, el valor y si lleva signo de DÓLAR (True/False)
+                # Definimos los iconos, etiquetas, el nombre EXACTO de la columna y si lleva "$" (True/False)
                 ofertas = [
                     ("💳", "Límite Tarjeta de Crédito", row.get("Limite TC"), True),
-                    ("💳", "Tipo de Tarjeta de Crédito", row.get("Tipo TC"), False), # False para no ponerle "$"
+                    ("💳", "Tipo de Tarjeta de Crédito", row.get("Tipo TC"), False),
                     ("📱", "Consumo Móvil", row.get("Consumo Movil"), True),
                     ("💸", "Adelanto de Salario", row.get("Adelanto de Salario"), True),
                     ("🏦", "Orden de Descuento", row.get("Consumo con Orden de Descuento"), True),
@@ -50,10 +50,8 @@ if df is not None:
                 # Mostramos las ofertas filtrando ceros y nulos en varios formatos
                 ofertas_mostradas = 0
                 for icono, nombre, valor, es_moneda in ofertas:
-                    # Normalizamos el valor a texto en minúsculas para compararlo bien
                     val_str = str(valor).strip().lower()
                     
-                    # Filtramos todo lo que sea vacío, cero o nulo
                     if pd.notna(valor) and val_str not in ["0", "0.0", "0.00", "nan", "none", "null", ""]:
                         prefix = "$ " if es_moneda else ""
                         st.markdown(f"""
@@ -70,16 +68,11 @@ if df is not None:
                 st.divider()
                 
                 # Total destacado
-                total = row.get('Total Ofertado', 'No disponible')
-                if str(total).strip().lower() not in ["nan", "none", "0", "0.0"]:
+                total = row.get("Total Ofertado")
+                if pd.notna(total) and str(total).strip().lower() not in ["nan", "none", "0", "0.0", ""]:
                     st.metric(label="💰 TOTAL DISPONIBLE PARA TI", value=f"$ {total}")
                 
                 st.info("ℹ️ Para activar cualquiera de estas ofertas, acércate a tu agencia más cercana o llámanos. 📞")
-                
-                # 🛠️ MODO DEBUG: Esto te salvará la vida para ver qué hay realmente en la fila
-                with st.expander("🛠️ Modo Debug (Ver datos de esta fila)"):
-                    st.write("Si las ofertas salen vacías, revisa si los nombres de las columnas aquí coinciden exactamente con el código:")
-                    st.json(row.to_dict())
 
             else:
                 st.error("😕 Lo sentimos, no encontramos ofertas asociadas a ese DUI. Por favor, verifica el número.")
