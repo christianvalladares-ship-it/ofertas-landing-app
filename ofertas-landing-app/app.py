@@ -14,7 +14,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-st.title("🏦 ¡Hola! Consulta tus beneficios")
+st.title("🏦 ¡Hola! Consulta tus ofertas disponibles")
 st.markdown("Ingresa tu número de **DUI** para descubrir las ofertas exclusivas que tenemos preparadas para ti hoy. 🚀")
 
 df = load_data()
